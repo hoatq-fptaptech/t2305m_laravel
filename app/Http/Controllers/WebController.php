@@ -29,4 +29,10 @@ class WebController extends Controller
             ->orderBy("id","desc")->limit(4)->get();
         return view("page.detail",compact('product','relateds'));
     }
+
+    public function detailCategory(Category $category){
+        $products = Product::where("category_id",$category->id)->orderBy("id","desc")->paginate(15);
+        $categories = Category::all();
+        return view("page.category",compact('category','products','categories'));
+    }
 }

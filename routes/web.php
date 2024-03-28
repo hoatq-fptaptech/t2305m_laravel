@@ -18,3 +18,6 @@ Route::get('/',[WebController::class,"home"]);
 Route::get("/about-us",[WebController::class,"aboutUs"]);
 
 Route::get("/detail/{product:slug}",[WebController::class,'detailProduct']);
+Route::get("/detail-cat/{category:slug}",[WebController::class,'detailCategory']);
+
+Route::get("/search",[WebController::class,'search']);
