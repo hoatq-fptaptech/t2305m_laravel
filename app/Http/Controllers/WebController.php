@@ -35,4 +35,14 @@ class WebController extends Controller
         $categories = Category::all();
         return view("page.category",compact('category','products','categories'));
     }
+
+    public function search(Request $request){ // reflection
+        // get keyword
+        $keyword = $request->get("keyword");
+        $products = Product::where("name","LIKE","%$keyword%")
+            ->orWhere("description","LIKE","%$keyword%")
+            ->orderBy("id","desc")->paginate(15);
+        $categories = Category::all();
+        return view("page.search",compact('products','categories')); // render
+    }
 }
