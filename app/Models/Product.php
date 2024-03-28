@@ -11,6 +11,7 @@ class Product extends Model
     protected $table = 'products';
     protected $fillable = [
         'name',
+        'slug',
         'price',
         'thumbnail',
         'description',
@@ -18,4 +19,12 @@ class Product extends Model
         'category_id',
         'brand_id'
     ];
+
+    public function getUrl(){
+        return url("/detail",["product"=>$this->slug]);
+    }
+
+    public function Category(){
+        return $this->belongsTo(Category::class);
+    }
 }

@@ -22,9 +22,11 @@ class WebController extends Controller
     }
 
     public function detailProduct(Product $product){
+        // $data = Product::where("slug",$product)->firstOrFail();
 //        $data = Product::find($product);
 //        $data = Product::findOrFail($product);
-
-        return view("page.detail",compact('product'));
+        $relateds = Product::where("category_id",$product->category_id)->where("id","!=",$product->id)
+            ->orderBy("id","desc")->limit(4)->get();
+        return view("page.detail",compact('product','relateds'));
     }
 }
