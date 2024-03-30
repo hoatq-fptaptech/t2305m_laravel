@@ -45,4 +45,26 @@ class WebController extends Controller
         $categories = Category::all();
         return view("page.search",compact('products','categories')); // render
     }
+
+    public function addToCart(Product $product,Request $request){
+        $buy_qty = $request->has("buy_qty")?$request->get("buy_qty"):1;
+        // lấy giỏ hàng ra (nếu có)
+        $cart = session()->has("cart")?session()->get("cart"):[];
+        // thêm sp vào giỏ hàng
+        $check =  false;
+        foreach ($cart as $item){
+            if($item->id == $product->id){
+                $item->buy_qty = $item->buy_qty + $buy_qty;
+                $check = true;
+                break;
+            }
+        }
+        if($check == false){
+            $product->buy_qty = $buy_qty;
+            $cart[] = $product;
+        }
+        // set giá trị giỏ hàng lại vào session
+        session()->put(["cart"=>$cart]); // session()->put("cart",$cart);
+        return redirect()->back();
+    }
 }
