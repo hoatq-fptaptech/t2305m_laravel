@@ -36,6 +36,15 @@
 <!-- Footer Section Begin -->
 @include('layout.part.footer')
 <!-- Footer Section End -->
+@if(session()->has("success"))
+<div class="col-4 mt-4 ml-2 fixed-bottom alert alert-success alert-dismissible fade show" role="alert">
+    {{session()->get("success")}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
+
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>

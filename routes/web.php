@@ -23,3 +23,4 @@ Route::get("/detail-cat/{category:slug}",[WebController::class,'detailCategory']
 Route::get("/search",[WebController::class,'search']);
 
 Route::post("/add-to-cart/{product}",[WebController::class,"addToCart"]);
+Route::get("/cart",[WebController::class,"cart"]);

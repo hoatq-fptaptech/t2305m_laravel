@@ -65,6 +65,15 @@ class WebController extends Controller
         }
         // set giá trị giỏ hàng lại vào session
         session()->put(["cart"=>$cart]); // session()->put("cart",$cart);
-        return redirect()->back();
+        return redirect()->back()->with("success","Đã thêm $product->name vào giỏ hàng!");
+    }
+
+    public function cart(){
+        $cart = session()->has("cart")?session()->get("cart"):[];
+        $total = 0;
+        foreach ($cart as $item){
+            $total += $item->buy_qty * $item->price;
+        }
+        return view("page.cart",compact('cart','total'));
     }
 }
