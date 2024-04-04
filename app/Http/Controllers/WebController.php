@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WebController extends Controller
 {
@@ -87,5 +89,63 @@ class WebController extends Controller
             $total += $item->buy_qty * $item->price;
         }
         return view("page.checkout",compact('cart','total'));
+    }
+
+    public function placeOrder(Request $request){
+        $cart = session()->has("cart")?session()->get("cart"):[];
+        if(count($cart) == 0){
+            return redirect()->to("/cart");
+        }
+        $total = 0;
+        foreach ($cart as $item){
+            $total += $item->buy_qty * $item->price;
+        }
+
+        // tạo đơn hàng
+        $request->validate(
+            [
+                'shipping_address'=> "required|string|min:6",
+                'shipping_method'=>'required',
+                'payment_method'=>"required",
+                'first_name'=>"required|string",
+                'last_name'=>"required|string",
+                'city'=>"required|string",
+                'telephone'=>"required|string|min:10",
+                'email'=>"required|string|min:6",
+            ],
+            [
+                "required"=> "Vui lòng nhập thông tin :attribute",
+                "min"=> "Hãy nhập giá trị :attribute tối thiểu là :min"
+            ]
+        );
+        $order = Order::create(
+            [
+                'grand_total'=>$total,
+                'shipping_address'=>$request->get("shipping_address"),
+                'shipping_method'=>$request->get("shipping_method"),
+                'payment_method'=>$request->get("payment_method"),
+                'status'=>0,
+                'first_name'=>$request->get("first_name"),
+                'last_name'=>$request->get("last_name"),
+                'city'=>$request->get("city"),
+                'telephone'=>$request->get("telephone"),
+                'email'=>$request->get("email"),
+                'order_note'=>$request->get("order_note"),
+            ]
+        );
+        // Tạo các sản phẩm được mua của đơn hàng
+        foreach ($cart as $item){
+            DB::table("order_products")->insert(
+                [
+                    'order_id'=>$order->id,
+                    'product_id'=>$item->id,
+                    'qty'=>$item->buy_qty,
+                    'price'=>$item->price
+                ]
+            );
+        }
+        // Thanh toán online nếu có
+
+        // Gửi email
     }
 }

@@ -19,48 +19,69 @@
             </div>
             <div class="checkout__form">
                 <h4>Billing Details</h4>
-                <form action="#">
+                <form action="{{url("/checkout")}}" method="post">
+                    @csrf
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Fist Name<span>*</span></p>
-                                        <input name="first_name" type="text">
+                                        <input value="{{old("first_name")}}" name="first_name" type="text">
+                                        @error("first_name")
+                                            <p class="text-danger">{{$message}}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Last Name<span>*</span></p>
-                                        <input name="last_name" type="text">
+                                        <input value="{{old("last_name")}}" name="last_name" type="text">
+                                        @error("last_name")
+                                        <p class="text-danger">{{$message}}</p>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
                                 <p>Address<span>*</span></p>
-                                <textarea name="shipping_address" class="form-control" placeholder="Shipping Address"></textarea>
+                                <textarea name="shipping_address" class="form-control" placeholder="Shipping Address">
+                                    {{old("shipping_address")}}
+                                </textarea>
+                                @error("shipping_address")
+                                <p class="text-danger">{{$message}}</p>
+                                @enderror
                             </div>
                             <div class="checkout__input">
                                 <p>City<span>*</span></p>
-                                <input name="city" type="text">
+                                <input value="{{old("city")}}" name="city" type="text">
+                                @error("city")
+                                <p class="text-danger">{{$message}}</p>
+                                @enderror
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Telephone<span>*</span></p>
-                                        <input name="telephone" type="text">
+                                        <input value="{{old("telephone")}}" name="telephone" type="text">
+                                        @error("telephone")
+                                        <p class="text-danger">{{$message}}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
-                                        <input name="email" type="text">
+                                        <input value="{{old("email")}}" name="email" type="text">
+                                        @error("email")
+                                        <p class="text-danger">{{$message}}</p>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
                                 <p>Order notes</p>
-                                <input name="order_note" type="text"
+                                <input value="{{old("order_note")}}" name="order_note" type="text"
                                        placeholder="Notes about your order, e.g. special notes for delivery.">
                             </div>
                             <div class="checkout__input__checkbox">
@@ -83,6 +104,9 @@
                                     <input name="shipping_method"  value="express" type="radio" id="express">
                                     <span class="checkmark"></span>
                                 </label>
+                                @error("shipping_method")
+                                <p class="text-danger">{{$message}}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
@@ -110,6 +134,9 @@
                                         <input name="payment_method" value="Paypal" type="radio" id="paypal">
                                         <span class="checkmark"></span>
                                     </label>
+                                    @error("payment_method")
+                                    <p class="text-danger">{{$message}}</p>
+                                    @enderror
                                 </div>
                                 <button type="submit" class="site-btn">PLACE ORDER</button>
                             </div>

@@ -25,3 +25,4 @@ Route::get("/search",[WebController::class,'search']);
 Route::post("/add-to-cart/{product}",[WebController::class,"addToCart"]);
 Route::get("/cart",[WebController::class,"cart"]);
 Route::get("/checkout",[WebController::class,"checkout"]);
+Route::post("/checkout",[WebController::class,"placeOrder"]);
