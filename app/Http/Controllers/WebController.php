@@ -76,4 +76,16 @@ class WebController extends Controller
         }
         return view("page.cart",compact('cart','total'));
     }
+
+    public function checkout(){
+        $cart = session()->has("cart")?session()->get("cart"):[];
+        if(count($cart) == 0){
+            return redirect()->to("/cart");
+        }
+        $total = 0;
+        foreach ($cart as $item){
+            $total += $item->buy_qty * $item->price;
+        }
+        return view("page.checkout",compact('cart','total'));
+    }
 }
