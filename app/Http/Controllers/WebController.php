@@ -153,6 +153,6 @@ class WebController extends Controller
         // Gửi email
         Mail::to($order->email)->send(new NewOrderMail($order));
 
-        die("done");
+        return redirect()->to("/thank-you/".$order->id);
     }
 }
