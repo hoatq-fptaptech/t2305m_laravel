@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewOrderMail;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class WebController extends Controller
 {
@@ -144,8 +146,13 @@ class WebController extends Controller
                 ]
             );
         }
-        // Thanh toán online nếu có
+        // xoá giỏ hàng
+//        session()->forget("cart");
+        // Thanh toán online nếu có -- về nhà đăng ký tài khoản paypal
 
         // Gửi email
+        Mail::to($order->email)->send(new NewOrderMail($order));
+
+        die("done");
     }
 }

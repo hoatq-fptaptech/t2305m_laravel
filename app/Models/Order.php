@@ -22,4 +22,8 @@ class Order extends Model
         'email',
         'order_note',
     ];
+
+    public function Products(){
+        return $this->belongsToMany(Product::class,"order_products")->withPivot(["qty","price"]);
+    }
 }
