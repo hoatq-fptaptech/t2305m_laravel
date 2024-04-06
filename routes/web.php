@@ -27,3 +27,5 @@ Route::get("/cart",[WebController::class,"cart"]);
 Route::get("/checkout",[WebController::class,"checkout"]);
 Route::post("/checkout",[WebController::class,"placeOrder"]);
 //Route::get("/thank-you/{order}",)
+Route::get("/paypal-success/{order}",[WebController::class,"paypalSuccess"]);
+Route::get("/paypal-cancel/{order}",[WebController::class,"paypalCancel"]);
