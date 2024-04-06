@@ -149,6 +149,8 @@ class WebController extends Controller
         }
         // xoá giỏ hàng
 //        session()->forget("cart");
+        // Gửi email
+        Mail::to($order->email)->send(new NewOrderMail($order));
         // Thanh toán online nếu có -- về nhà đăng ký tài khoản paypal
         if($request->get("payment_method") == "Paypal"){
             // thanh toán bằng paypal
@@ -166,42 +168,66 @@ class WebController extends Controller
                     0 => [
                         "amount" => [
                             "currency_code" => "USD",
-                            "value" => "1000.00"
+                            "value" => number_format($order->grand_total,2,".","") // 1200.50 - string  57.00
                         ]
                     ]
                 ]
             ]);
-
             if (isset($response['id']) && $response['id'] != null) {
-
                 // redirect to approve href
                 foreach ($response['links'] as $links) {
                     if ($links['rel'] == 'approve') {
                         return redirect()->away($links['href']);
                     }
                 }
-
-                return redirect()
-                    ->route('createTransaction')
-                    ->with('error', 'Something went wrong.');
-
-            } else {
-                return redirect()
-                    ->route('createTransaction')
-                    ->with('error', $response['message'] ?? 'Something went wrong.');
             }
         }
-        // Gửi email
-        Mail::to($order->email)->send(new NewOrderMail($order));
-
         return redirect()->to("/thank-you/".$order->id);
     }
 
     public function paypalSuccess(Order $order){
-        die("Success");
+        // update paid -> true
+        $order->update([
+            "paid"=>true
+        ]);
+        return redirect()->to("/thank-you/".$order->id);
     }
 
     public function paypalCancel(Order $order){
-        die("Cancel");
+        // update paid -> false
+        $order->update([
+            "paid"=>false
+        ]);
+        return redirect()->to("/thank-you/".$order->id);
+    }
+
+    public function payPalAgain(Order $order){
+        $provider = new PayPalClient;
+        $provider->setApiCredentials(config('paypal'));
+        $paypalToken = $provider->getAccessToken();
+
+        $response = $provider->createOrder([
+            "intent" => "CAPTURE",
+            "application_context" => [
+                "return_url" => url("paypal-success",["order"=>$order->id]),
+                "cancel_url" => url("paypal-cancel",["order"=>$order->id]),
+            ],
+            "purchase_units" => [
+                0 => [
+                    "amount" => [
+                        "currency_code" => "USD",
+                        "value" => number_format($order->grand_total,2,".","") // 1200.50 - string  57.00
+                    ]
+                ]
+            ]
+        ]);
+        if (isset($response['id']) && $response['id'] != null) {
+            // redirect to approve href
+            foreach ($response['links'] as $links) {
+                if ($links['rel'] == 'approve') {
+                    return redirect()->away($links['href']);
+                }
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@ class Order extends Model
         'telephone',
         'email',
         'order_note',
+        "paid"
     ];
 
     public function Products(){
