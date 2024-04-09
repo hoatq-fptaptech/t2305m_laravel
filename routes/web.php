@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/',[WebController::class,"home"]);
 Route::get("/about-us",[WebController::class,"aboutUs"]);
@@ -30,4 +31,6 @@ Route::post("/checkout",[WebController::class,"placeOrder"]);
 Route::get("/paypal-success/{order}",[WebController::class,"paypalSuccess"]);
 Route::get("/paypal-cancel/{order}",[WebController::class,"paypalCancel"]);
 
-//Route::get("/admin")
+Route::get("/admin",[AdminController::class,"dashboard"]);
+Route::get("/admin/orders",[AdminController::class,"orders"]);
+Route::get("/admin/orders/{order}",[AdminController::class,"detailOrder"]);

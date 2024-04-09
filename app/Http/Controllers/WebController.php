@@ -127,7 +127,7 @@ class WebController extends Controller
                 'shipping_address'=>$request->get("shipping_address"),
                 'shipping_method'=>$request->get("shipping_method"),
                 'payment_method'=>$request->get("payment_method"),
-                'status'=>0,
+                'status'=> Order::STATUS_PENDING,
                 'first_name'=>$request->get("first_name"),
                 'last_name'=>$request->get("last_name"),
                 'city'=>$request->get("city"),
@@ -148,7 +148,7 @@ class WebController extends Controller
             );
         }
         // xoá giỏ hàng
-//        session()->forget("cart");
+        session()->forget("cart");
         // Gửi email
         Mail::to($order->email)->send(new NewOrderMail($order));
         // Thanh toán online nếu có -- về nhà đăng ký tài khoản paypal
@@ -188,7 +188,8 @@ class WebController extends Controller
     public function paypalSuccess(Order $order){
         // update paid -> true
         $order->update([
-            "paid"=>true
+            "paid"=>true,
+            "status"=>Order::STATUS_CONFIRMED
         ]);
         return redirect()->to("/thank-you/".$order->id);
     }
