@@ -34,3 +34,4 @@ Route::get("/paypal-cancel/{order}",[WebController::class,"paypalCancel"]);
 Route::get("/admin",[AdminController::class,"dashboard"]);
 Route::get("/admin/orders",[AdminController::class,"orders"]);
 Route::get("/admin/orders/{order}",[AdminController::class,"detailOrder"]);
+Route::get("/admin/orders/confirm/{order}",[AdminController::class,"confirmOrder"]);

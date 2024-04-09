@@ -43,6 +43,18 @@ class Order extends Model
         }
     }
 
+    public function statusButtonAction(){
+        switch ($this->status){
+            case self::STATUS_PENDING: return '<a onclick="return confirm(`Chắc chắn xác nhận đơn hàng?`)" href="'.url("/admin/orders/confirm",['order'=>$this->id]).'" class="btn btn-outline-warning float-right ml-1">Confirm</a>
+                    <a href="#" class="btn btn-outline-danger float-right">Cancel</a>';
+            case self::STATUS_CONFIRMED: return '<a href="#" class="btn btn-outline-info float-right ml-1">Shipping</a>
+                    <a href="#" class="btn btn-outline-danger float-right">Cancel</a>';
+            case self::STATUS_SHIPPING: return '<a href="#" class="btn btn-outline-success float-right ml-1">Ship successful</a>';
+            case self::STATUS_SHIPPED: return '<a href="#" class="btn btn-outline-success float-right ml-1">Complete Order</a>';
+            case self::STATUS_COMPLETE: return '';
+            case self::STATUS_CANCEL: return '';
+        }
+    }
     public function Products(){
         return $this->belongsToMany(Product::class,"order_products")->withPivot(["qty","price"]);
     }

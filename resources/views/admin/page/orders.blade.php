@@ -70,7 +70,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{!! $item->statusLabel() !!}</td>
-                                                <td><a href="#">Detail</a></td>
+                                                <td><a href="{{url("/admin/orders",['order'=>$item->id])}}">Detail</a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
