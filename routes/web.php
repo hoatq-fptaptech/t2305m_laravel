@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\AdminController;
 Auth::routes();
+Route::middleware(['auth','admin'])->prefix("admin")->group(function (){
+    include_once("admin.php");
+});
 
 Route::get('/',[WebController::class,"home"]);
 Route::get("/about-us",[WebController::class,"aboutUs"]);
@@ -34,11 +37,5 @@ Route::middleware(["auth"])->group(function (){
     Route::get("/paypal-cancel/{order}",[WebController::class,"paypalCancel"]);
 });
 
-Route::middleware(['auth','admin'])->prefix("admin")->group(function (){
-    Route::get("/",[AdminController::class,"dashboard"]);
-    Route::get("/orders",[AdminController::class,"orders"]);
-    Route::get("/orders/{order}",[AdminController::class,"detailOrder"]);
-    Route::get("/orders/confirm/{order}",[AdminController::class,"confirmOrder"]);
-});
 
 
