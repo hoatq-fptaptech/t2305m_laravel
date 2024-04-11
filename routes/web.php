@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\AdminController;
+Auth::routes();
 
 Route::get('/',[WebController::class,"home"]);
 Route::get("/about-us",[WebController::class,"aboutUs"]);
@@ -23,19 +24,21 @@ Route::get("/detail-cat/{category:slug}",[WebController::class,'detailCategory']
 
 Route::get("/search",[WebController::class,'search']);
 
-Route::post("/add-to-cart/{product}",[WebController::class,"addToCart"]);
-Route::get("/cart",[WebController::class,"cart"]);
-Route::get("/checkout",[WebController::class,"checkout"]);
-Route::post("/checkout",[WebController::class,"placeOrder"]);
+Route::middleware(["auth"])->group(function (){
+    Route::post("/add-to-cart/{product}",[WebController::class,"addToCart"]);
+    Route::get("/cart",[WebController::class,"cart"]);
+    Route::get("/checkout",[WebController::class,"checkout"]);
+    Route::post("/checkout",[WebController::class,"placeOrder"]);
 //Route::get("/thank-you/{order}",)
-Route::get("/paypal-success/{order}",[WebController::class,"paypalSuccess"]);
-Route::get("/paypal-cancel/{order}",[WebController::class,"paypalCancel"]);
+    Route::get("/paypal-success/{order}",[WebController::class,"paypalSuccess"]);
+    Route::get("/paypal-cancel/{order}",[WebController::class,"paypalCancel"]);
+});
 
-Route::get("/admin",[AdminController::class,"dashboard"]);
-Route::get("/admin/orders",[AdminController::class,"orders"]);
-Route::get("/admin/orders/{order}",[AdminController::class,"detailOrder"]);
-Route::get("/admin/orders/confirm/{order}",[AdminController::class,"confirmOrder"]);
+Route::middleware(['auth'])->prefix("admin")->group(function (){
+    Route::get("/",[AdminController::class,"dashboard"]);
+    Route::get("/orders",[AdminController::class,"orders"]);
+    Route::get("/orders/{order}",[AdminController::class,"detailOrder"]);
+    Route::get("/orders/confirm/{order}",[AdminController::class,"confirmOrder"]);
+});
 
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

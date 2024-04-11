@@ -82,7 +82,16 @@
                             </ul>
                         </div>
                         <div class="header__top__right__auth">
-                            <a href="#"><i class="fa fa-user"></i> Login</a>
+                            @auth
+                                <a href="#"><i class="fa fa-user"></i>{{ auth()->user()->name }}</a>
+                                <form action="{{route("logout")}}" method="post">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-light">Logout</button>
+                                </form>
+                            @endauth
+                            @guest
+                                <a href="{{route("login")}}"><i class="fa fa-user"></i>Login</a>
+                            @endguest
                         </div>
                     </div>
                 </div>
@@ -114,7 +123,6 @@
                         <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
                         <li><a href="{{url("/cart")}}"><i class="fa fa-shopping-bag"></i> <span>{{session()->has("cart")?count(session()->get("cart")):0}}</span></a></li>
                     </ul>
-                    <div class="header__cart__price">item: <span>$150.00</span></div>
                 </div>
             </div>
         </div>
