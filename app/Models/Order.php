@@ -58,4 +58,20 @@ class Order extends Model
     public function Products(){
         return $this->belongsToMany(Product::class,"order_products")->withPivot(["qty","price"]);
     }
+
+    public function scopeSearch($query,$search){
+        if($search != "" && $search != null){
+            $query->where("first_name","like","%$search%")
+                ->orWhere("last_name","like","%$search%")
+                ->orWhere("telephone","like","%$search%");
+        }
+        return $query;
+    }
+
+    public function scopeStatus($query,$status){
+        if($status != null && $status != -1){
+            $query->where("status",$status);
+        }
+        return $query;
+    }
 }

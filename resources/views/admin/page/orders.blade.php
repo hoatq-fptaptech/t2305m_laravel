@@ -26,15 +26,29 @@
                             <div class="card-header">
                                 <h3 class="card-title">Responsive Hover Table</h3>
                                 <div class="card-tools">
-                                    <div class="input-group input-group-sm" style="width: 150px;">
-                                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                                        <div class="input-group-append">
-                                            <button type="submit" class="btn btn-default">
-                                                <i class="fas fa-search"></i>
-                                            </button>
+                                    <form action="{{url()->current()}}" method="get">
+                                        <div class="row">
+                                            <div class="input-group input-group-sm col" style="width: 150px;">
+                                                <select name="status" class="form-control">
+                                                    <option value="-1">All Status</option>
+                                                    <option @if(app("request")->input("status") == \App\Models\Order::STATUS_PENDING) selected @endif value="{{\App\Models\Order::STATUS_PENDING}}">Pending</option>
+                                                    <option @if(app("request")->input("status") == \App\Models\Order::STATUS_CONFIRMED) selected @endif value="{{\App\Models\Order::STATUS_CONFIRMED}}">Confirmed</option>
+                                                    <option @if(app("request")->input("status") == \App\Models\Order::STATUS_SHIPPING) selected @endif value="{{\App\Models\Order::STATUS_SHIPPING}}">Shipping</option>
+                                                    <option @if(app("request")->input("status") == \App\Models\Order::STATUS_SHIPPED) selected @endif value="{{\App\Models\Order::STATUS_SHIPPED}}">Shipped</option>
+                                                    <option @if(app("request")->input("status") == \App\Models\Order::STATUS_COMPLETE) selected @endif value="{{\App\Models\Order::STATUS_COMPLETE}}">Complete</option>
+                                                    <option @if(app("request")->input("status") == \App\Models\Order::STATUS_CANCEL) selected @endif value="{{\App\Models\Order::STATUS_CANCEL}}">Cancel</option>
+                                                </select>
+                                            </div>
+                                            <div class="input-group input-group-sm col" style="width: 200px;">
+                                                <input value="{{app("request")->input("search")}}" type="text" name="search" class="form-control float-right" placeholder="Search">
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-default">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                             <!-- /.card-header -->
