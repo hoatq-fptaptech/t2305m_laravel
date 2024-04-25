@@ -30,7 +30,8 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form action="#" method="Post">
+                            <form action="{{url("admin/products/create")}}" method="Post" enctype="multipart/form-data">
+                                @csrf
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Product name</label>
@@ -50,11 +51,19 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Category</label>
-                                        <input type="number" name="category_id" class="form-control"  placeholder="Category">
+                                        <select class="form-control" name="category_id">
+                                            @foreach($categories as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Brand</label>
-                                        <input type="number" name="brand_id" class="form-control"  placeholder="Brand">
+                                        <select class="form-control" name="brand_id">
+                                            @foreach($brands as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputFile">Thumbnail</label>
@@ -67,6 +76,9 @@
                                                 <span class="input-group-text">Upload</span>
                                             </div>
                                         </div>
+                                        @error("thumbnail")
+                                            <p class="text-danger">{{$message}}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <!-- /.card-body -->

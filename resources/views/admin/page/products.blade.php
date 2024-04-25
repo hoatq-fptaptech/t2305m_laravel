@@ -72,12 +72,20 @@
                                             <tr>
                                                 <td>#{{$item->id}}</td>
                                                 <td>{{$item->name}}</td>
-                                                <td>{{$item->thubnail}}</td>
+                                                <td><img src="{{$item->thumbnail}}" width="80"/> </td>
                                                 <td>{{$item->price}}</td>
                                                 <td>{{$item->qty}}</td>
                                                 <td>{{$item->category_id}}</td>
                                                 <td>{{$item->brand_id}}</td>
-                                                <td><a href="#">Detail</a></td>
+                                                <td>
+                                                    <a href="#">Detail</a>
+                                                    <form action="{{url("/admin/products/delete",["product"=>$item->id])}}" method="post">
+                                                        @method("delete")
+                                                        @csrf
+                                                        <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger">Delete</button>
+                                                    </form>
+
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
