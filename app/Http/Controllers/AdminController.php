@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -24,5 +25,14 @@ class AdminController extends Controller
     public function confirmOrder(Order $order){
         $order->update(["status"=>Order::STATUS_CONFIRMED]);
         return redirect()->back();
+    }
+
+    public function products(Request $request){
+        $products = Product::orderBy("id","DESC")->paginate(20);
+        return view("admin.page.products",compact('products'));
+    }
+
+    public function productCreate(){
+        return view("admin.page.product_create");
     }
 }
